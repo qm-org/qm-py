@@ -61,7 +61,7 @@ Text inside following characters **is not literal**: `<` `>` `(` `)`
 `--preset` / `-p` `<int>`
 : Specify quality preset
   - default: `1`
-  - min-max: `1-10`
+  - min-max: `1-7`
 
 `--contrast` / `-c` `<float>`
 : Modify video contrast
