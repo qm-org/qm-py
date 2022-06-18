@@ -1,8 +1,9 @@
 # Quality Muncher
 
 ## About
-This branch contains the Python version of Quality Muncher, it is still in
-development so if you have any bugs, issues, questions, or suggestions join our discord server: https://discord.gg/9tRZ6C7tYz
+This is the Python version of Quality Muncher. 
+
+It is still in development so if you have any bugs, issues, questions, or suggestions join our discord server: https://discord.gg/9tRZ6C7tYz
 
 # Installation
 
@@ -18,8 +19,6 @@ This will:
 1. Install [Scoop](https://scoop.sh), a convenient and easy-to-use package manager for Windows
 2. Add the [utils](https://github.com/couleur-tweak-tips/utils) bucket
 3. Download and install Quality Muncher
-4. 
-note: does not work yet
 
 
 ## Manual installation / Linux
@@ -115,3 +114,12 @@ Munch with every setting set to 10 (or their maximum value)
 ```
 qm -i video.mp4 -p 7 -c 2 -s 2 -b 2 -spd 10 -str 10:w -ad earrape:10,echo:10,delay:10 -v
 ```
+
+## Building
+`qm-py` uses a [Onefile Python Interpreter](https://github.com/Aetopia/Onefile-Python-Interpreter) so that you don't need to install Python to use it.
+
+If you wish to compile it yourself, follow these steps:
+1. Install [Python 3.10](https://www.python.org/downloads/release/python-3105) with PIP
+2. Install the following PIP packages: `pip install nuitka zstandard ordered-set`
+   - Only Nuitka is necessary but the other ones improve compilation speed
+3. Download the [latest release](https://github.com/qm-org/qm-py/releases/latest) and run `build.bat` in the build folder
