@@ -11,7 +11,7 @@ Run the following block of code in PowerShell:
 
 ```powershell
 iex(irm get.scoop.sh)
-scoop bucket add utils
+scoop bucket add utils https://github.com/couleur-tweak-tips/utils
 scoop install utils/qm-py
 ```
 This will:
