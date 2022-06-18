@@ -36,6 +36,7 @@ This version of Quality Muncher is used via the command line, `qm -h` should get
 
 ### Arguments
 Text inside following characters **is not literal**: `<` `>` `(` `)`
+
 `...` means the argument takes multiple values of the same format
 
 
