@@ -1,10 +1,11 @@
-import sys
-import re
-import argparse as ap
-import subprocess as sp
+from sys import argv
+from re import match
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from argparse import SUPPRESS as no
+from subprocess import run
 from os import path
 
-from helpers import *
+from helpers import pause, is_in_range, InvalidArgumentException, str_to_dict
 from plugins.colors import printp
 from executioner import build_n_run
 
@@ -12,13 +13,11 @@ from executioner import build_n_run
 def get_args():
 
     global parser
-    parser = ap.ArgumentParser(description='Quality Muncher | "The best worst quality"',
+    parser = ArgumentParser(description='Quality Muncher | "The best worst quality"',
                                prog='qm',
                                usage='%(prog)s -i <file> [options]',
-                               formatter_class=ap.RawDescriptionHelpFormatter,
+                               formatter_class=RawDescriptionHelpFormatter,
                                add_help=False)
-
-    no = ap.SUPPRESS
 
     opt = parser.add_argument_group('Optional arguments',
     description="""
@@ -110,10 +109,10 @@ def get_args():
                    help=no)
 
     n = 1
-    if len(sys.argv) > n: # https://github.com/Aetopia/Onefile-Python-Interpreter#workarounds
-        if sys.argv[0] == sys.argv[1]: n = 2
+    if len(argv) > n: # https://github.com/Aetopia/Onefile-Python-Interpreter#workarounds
+        if argv[0] == argv[1]: n = 2
 
-    return parser.parse_args(sys.argv[n:])
+    return parser.parse_args(argv[n:])
 
 
 args = vars(get_args()) # makes args a dict
@@ -122,30 +121,30 @@ args = vars(get_args()) # makes args a dict
 def main():
 
     if args['curdir']:
-        sp.run(f'explorer {sys.path[0]}'); sys.exit(0)
+        run(f'explorer {path[0]}'); exit(0)
 
     if not args['input']:
         parser.print_help()
-        pause(); sys.exit(0)
+        pause(); exit(0)
 
     if not path.exists(args['input']):
         printp(FileNotFoundError(f'Path does not exist: {args["input"]}'),
-               'exception'); sys.exit(1)
+               'exception'); exit(1)
 
     for arg in ('saturation', 'contrast', 'brightness'):
         if not is_in_range(args[arg], 0, 2):
             printp(ValueError(f'{arg.capitalize()} must be between 0 and 2, got "{args[arg]}"'),
-                   'exception'); sys.exit(1)
+                   'exception'); exit(1)
 
     if not is_in_range(args['preset'], 0, 7):
         printp(ValueError(f'Preset must be between 0 and 7, got "{args["preset"]}"'),
-               'exception'); sys.exit(1)
+               'exception'); exit(1)
 
     if stretch := args['stretch']:
-        if not re.match(r'\d+:\d+', stretch):
+        if not match(r'\d+:\d+', stretch):
             printp(InvalidArgumentException(
                    f'Stretch must be in format "multiplier:w/h", got "{stretch}"'),
-                   'exception'); sys.exit(1)
+                   'exception'); exit(1)
 
     if args['audio_distort']:
 
@@ -154,7 +153,7 @@ def main():
         if ':' not in joined:
             printp(InvalidArgumentException(
                    f'Audio distortion must be in format "method:strength", got "{joined}"'),
-                   'exception'); sys.exit(1)
+                   'exception'); exit(1)
 
         # parse into dict (audio_distort is a list)
         args['audio_distort'] = str_to_dict(joined)
@@ -164,12 +163,12 @@ def main():
             if arg[0] not in ('earrape', 'delay', 'echo'):
                 printp(InvalidArgumentException(
                        f'"{arg[0]}" is not a valid audio distortion method'),
-                       'exception'); sys.exit(1)
+                       'exception'); exit(1)
 
 
             if not is_in_range(arg[1], 1, 10):
                 printp(ValueError(f'{arg[0].casefold()} must be between 1 and 10, got "{arg[1]}"'),
-                       'exception'); sys.exit(1)
+                       'exception'); exit(1)
 
     build_n_run(args)
 

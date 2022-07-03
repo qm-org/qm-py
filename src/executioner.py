@@ -1,6 +1,6 @@
 import subprocess as sp
 from os import path, get_terminal_size
-from helpers import make_even
+from values import munch_enc, dur_cmd
 
 from muncher import munch
 from plugins.colors import *
@@ -33,10 +33,7 @@ def build_n_run(args: dict):
         enc = f'-an -map 0:0 -f gif'
 
     else:
-        enc = ' '.join((f'-c:v libx264 -b:v {munched["video_br"]}k -preset slower',
-                      # f'-maxrate {munched["video_br"]}k -minrate {munched["video_br"]}k -bufsize 1',
-                        f'-c:a aac -b:a {munched["audio_br"]}k',
-                        f'-x264-params partitions=p4x4,i4x4'))
+        enc = munch_enc(munched['videobr'], munched['audiobr']) 
 
     video_filters = '-vf ' + ','.join(munched['vf'])
     audio_filters = '-af ' + ','.join(munched['af']) if munched['af'] else ''
@@ -67,16 +64,10 @@ def build_n_run(args: dict):
 
         print_verb(verb)
 
-    dur_cmd = ' '.join((f'ffprobe -v error',
-                         '-of default=noprint_wrappers=1:nokey=1',
-                         '-select_streams v:0',
-                         '-show_entries format=duration',
-                         f'"{path.abspath(video)}"'))
-
     firstrun = True
     error = None
 
-    duration_output = sp.getoutput(dur_cmd)
+    duration_output = sp.getoutput(dur_cmd(path.abspath(video)))
 
     try:
         duration = float(duration_output)

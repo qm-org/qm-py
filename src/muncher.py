@@ -1,8 +1,9 @@
-import re
-import subprocess as sp
+from re import match
+from subprocess import getoutput
 from math import log, sqrt
 from os import path
 from plugins.colors import printp
+from values import video_cmd
 
 from helpers import make_even
 
@@ -13,14 +14,8 @@ class Video:
         return make_even(preset / (preset ** 2) / 4 * n)
 
     def get_res(video: str, stretch: str):
-
-        cmd = ' '.join(('ffprobe -v error',
-                        '-show_entries stream=width,height',
-                        '-of default=noprint_wrappers=1:nokey=1',
-                        f'"{path.abspath(video)}"'))
-
-        o = sp.getoutput(cmd)
-        if not re.match(r'\d+\n\d+', o): # check if output is valid
+        o = getoutput(video_cmd(path.abspath(video)))
+        if not match(r'\d+\n\d+', o): # check if output is valid
             printp(o, 'error')
             exit(1)
 
