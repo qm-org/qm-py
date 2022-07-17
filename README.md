@@ -85,14 +85,14 @@ Text inside following characters **is not literal**: `<` `>` `(` `)`
   - default: `1.0`
   - min-max: `0-2`
 
-`--stretch` / `-str` `<multiplier:(w/h)>`
+`--stretch` / `-str` `<multiplier>:<(w/h)>`
 : Stretch video resolution
   - multiplier can be a float
   - `w` stretches width, `h` stretches height
 
 ##### Audio options
 
-`--audio-distort` / `-ad` `<method:strength>, ...`
+`--audio-distort` / `-ad` `<method>:<strength>, ...`
 : Distort audio
   - methods: `earrape`, `echo`, `delay`
   - strength: `1-10` (float)
